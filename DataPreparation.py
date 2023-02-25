@@ -2,7 +2,35 @@ import csv
 import re
 
 
-class DataPreparation:
+class DataTokenization:
+
+    def __init__(self, dataset):
+        self.data = dataset
+
+    def convert_data(self):
+        new_format = []
+        with open(self.data, 'r') as datafile:
+            reader = csv.reader(datafile)
+            for row in reader:
+                new_array = []
+                # Method
+                new_array.append(self.method_token(row[0]))
+                # URL
+                new_array.append(self.length(row[1]))
+                new_array.append((self.num_upper_cases(row[1])))
+                new_array.append(self.num_lower_cases(row[1]))
+                new_array.append(self.num_numbers(row[1]))
+                new_array.append(self.num_special_chars(new_array[1], new_array[2], new_array[3], new_array[4]))
+                # Body of request
+                new_array.append(self.length(row[2]))
+                new_array.append((self.num_upper_cases(row[2])))
+                new_array.append(self.num_lower_cases(row[2]))
+                new_array.append(self.num_numbers(row[2]))
+                new_array.append(self.num_special_chars(new_array[6], new_array[7], new_array[8], new_array[9]))
+                new_array.append(self.label(row[3]))
+                new_format.append(new_array)
+
+            return new_format
 
     @staticmethod
     def method_token(method):
@@ -36,8 +64,17 @@ class DataPreparation:
         return numbers
 
     @staticmethod
-    def num_special_chars(string, uppers, lowers, numbers):
-        full_length = len(string)
-        normal_chars = uppers + lowers + numbers
-        special_chars = full_length - normal_chars
+    def num_special_chars(full_length, uppers, lowers, numbers):
+        special_chars = full_length - (uppers + lowers + numbers)
         return special_chars
+
+    @staticmethod
+    def label(string):
+        label = 2
+        if string == 'normal':
+            label = 0
+        elif string == 'anomalous':
+            label = 1
+        else:
+            print('Wrong label name! Please rename your labels!')
+        return label

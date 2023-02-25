@@ -17,7 +17,6 @@ class DataParser:
     def txt_cvs_parse(self):
         with open(self.file_name, 'r') as input_file, open(self.label + '.csv', 'w', newline='') as output_file:
             writer = csv.writer(output_file)
-            writer.writerow(['Method', 'URL', 'Body', 'Label'])
             while True:
                 line = input_file.readline()
                 if not line:

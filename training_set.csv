@@ -1,4 +1,3 @@
-Method,URL,Body,Label
 GET,http://localhost:8080/tienda1/index.jsp,,normal
 GET,http://localhost:8080/tienda1/publico/anadir.jsp?id=3&nombre=Vino+Rioja&precio=100&cantidad=55&B1=A%F1adir+al+carrito,,normal
 POST,http://localhost:8080/tienda1/publico/anadir.jsp,id=3&nombre=Vino+Rioja&precio=100&cantidad=55&B1=A%F1adir+al+carrito,normal
@@ -17999,7 +17998,6 @@ GET,http://localhost:8080/tienda1/imagenes/3.gif,,normal
 GET,http://localhost:8080/tienda1/imagenes/cmenbul.gif,,normal
 GET,http://localhost:8080/tienda1/imagenes/logo.gif,,normal
 GET,http://localhost:8080/tienda1/imagenes/nuestratierra.jpg,,normal
-GET,http://localhost:8080/tienda1/miembros/editar.jsp?modo=%2500&login=buehler&password=antares&nombre=Joselina&apellidos=Gual+Quirce&email=andreytschenko%40mtos.io&dni=31178285Z&direccion=C%2F+Rafael+Alberti%2C+140+&ciudad=Castroserrac%EDn&cp=44233&provincia=Palencia&ntc=2107485639768093&B1=Registrar,,anomalous
 POST,http://localhost:8080/tienda1/miembros/editar.jsp,modo=%2500&login=buehler&password=antares&nombre=Joselina&apellidos=Gual+Quirce&email=andreytschenko%40mtos.io&dni=31178285Z&direccion=C%2F+Rafael+Alberti%2C+140+&ciudad=Castroserrac%EDn&cp=44233&provincia=Palencia&ntc=2107485639768093&B1=Registrar,anomalous
 GET,http://localhost:8080/tienda1/miembros/editar.jsp?modo=registro&login=buehler&password=57104%27%27la&nombre=Joselina&apellidos=Gual+Quirce&email=andreytschenko%40mtos.io&dni=31178285Z&direccion=C%2F+Rafael+Alberti%2C+140+&ciudad=Castroserrac%EDn&cp=44233&provincia=Palencia&ntc=2107485639768093&B1=Registrar,,anomalous
 POST,http://localhost:8080/tienda1/miembros/editar.jsp,modo=registro&login=buehler&password=57104%27%27la&nombre=Joselina&apellidos=Gual+Quirce&email=andreytschenko%40mtos.io&dni=31178285Z&direccion=C%2F+Rafael+Alberti%2C+140+&ciudad=Castroserrac%EDn&cp=44233&provincia=Palencia&ntc=2107485639768093&B1=Registrar,anomalous

@@ -1,4 +1,3 @@
-Method,URL,Body,Label
 GET,http://localhost:8080/tienda1/index.jsp,,normal
 GET,http://localhost:8080/tienda1/publico/anadir.jsp?id=3&nombre=Vino+Rioja&precio=100&cantidad=55&B1=A%F1adir+al+carrito,,normal
 POST,http://localhost:8080/tienda1/publico/anadir.jsp,id=3&nombre=Vino+Rioja&precio=100&cantidad=55&B1=A%F1adir+al+carrito,normal
