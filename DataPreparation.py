@@ -27,6 +27,7 @@ class DataTokenization:
                 new_array.append(self.num_lower_cases(row[2]))
                 new_array.append(self.num_numbers(row[2]))
                 new_array.append(self.num_special_chars(new_array[6], new_array[7], new_array[8], new_array[9]))
+                # Label
                 new_array.append(self.label(row[3]))
                 new_format.append(new_array)
 
@@ -75,6 +76,4 @@ class DataTokenization:
             label = 0
         elif string == 'anomalous':
             label = 1
-        else:
-            print('Wrong label name! Please rename your labels!')
         return label
