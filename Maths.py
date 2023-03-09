@@ -28,6 +28,7 @@ class Maths:
             biases.append(Maths.gaussian_number() * 0.01)
         return biases
 
+    # Feedforward algorithm methods
     @staticmethod
     def weighted_sums(inputs, weights, number_of_neurons):
         weighted_sums = []
@@ -54,12 +55,18 @@ class Maths:
             Maths.sigmoid(neuron)
 
     @staticmethod
-    def feedforward_algorithm(inputs, weights, number_of_neurons, biases):
+    def feedforward(inputs, weights, number_of_neurons, biases):
         weighted_sums = Maths.weighted_sums(inputs, weights, number_of_neurons)
         Maths.add_biases(weighted_sums, biases)
         Maths.activation_function(weighted_sums)
         return weighted_sums
 
+    # Backpropagation support methods
     @staticmethod
-    def backpropagation_algorithm():
-        return 0
+    def update_weights(weights, neuron_pointer, learning_rate, error, previous_layer):
+        for weight in previous_layer:
+            weights[weight][neuron_pointer] += learning_rate * error * previous_layer[weight]
+
+    @staticmethod
+    def update_biases(biases, neuron_pointer, learning_rate, error):
+        biases[neuron_pointer] += learning_rate * error

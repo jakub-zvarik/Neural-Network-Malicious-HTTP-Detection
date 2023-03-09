@@ -7,8 +7,8 @@ class DataTokenization:
     def __init__(self, dataset):
         self.data = dataset
 
-    def convert_data(self):
-        new_format = []
+    def tokenize_data(self):
+        tokenized_data = []
         with open(self.data, 'r') as datafile:
             reader = csv.reader(datafile)
             for row in reader:
@@ -27,11 +27,19 @@ class DataTokenization:
                 new_array.append(self.num_lower_cases(row[2]))
                 new_array.append(self.num_numbers(row[2]))
                 new_array.append(self.num_special_chars(new_array[6], new_array[7], new_array[8], new_array[9]))
-                # Label
-                new_array.append(self.label(row[3]))
-                new_format.append(new_array)
+                # Append to the resulting array
+                tokenized_data.append(new_array)
 
-            return new_format
+            return tokenized_data
+
+    def tokenize_labels(self):
+        tokenized_labels = []
+        with open(self.data, 'r') as datafile:
+            reader = csv.reader(datafile)
+            for row in reader:
+                label = self.label(row[3])
+                tokenized_labels.append(label)
+            return tokenized_labels
 
     @staticmethod
     def method_token(method):

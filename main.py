@@ -14,8 +14,9 @@ def data_organiser():
 
 
 def main():
-    data = DataTokenization('training_data_shuffled.csv').convert_data()
-    print(data)
+    training_data = DataTokenization('training_data_shuffled.csv').tokenize_data()
+    targets = DataTokenization('training_data_shuffled.csv').tokenize_labels()
+    print(training_data)
 
 
 if __name__ == "__main__":
