@@ -32,10 +32,10 @@ class NeuralNetwork:
 
         return weighted_sum_in_output
 
-    def backpropagation_output_hidden(self, outputs_hidden, outputs_output, targets):
+    def backpropagation_output(self, outputs_hidden, outputs_output, targets):
         errors_in_output = []
         # Error in the output layer calculation
-        for neuron in self.output_neurons:
+        for neuron in range(self.output_neurons):
             error = outputs_output[neuron] * (1 - outputs_output[neuron]) * (targets[neuron] - outputs_output[neuron])
             errors_in_output.append(error)
 
@@ -44,3 +44,10 @@ class NeuralNetwork:
             Maths.update_biases(self.biases_output, neuron, self.learning_rate, error)
 
         return errors_in_output
+
+    # def backpropagation_hidden(self, outputs_hidden, neurons_second_layer, errors, weights):
+    #     for neuron_hidden in range(len(outputs_hidden)):
+    #         error = 0
+    #         for neuron_second_layer in neurons_second_layer:
+    #             error += errors[neuron_second_layer] * weights[neuron_hidden][neuron_second_layer]
+    #         error *= outputs_hidden[neuron_hidden] * (1 - outputs_hidden[neuron_hidden])

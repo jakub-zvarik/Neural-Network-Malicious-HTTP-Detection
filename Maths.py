@@ -64,7 +64,7 @@ class Maths:
     # Backpropagation support methods
     @staticmethod
     def update_weights(weights, neuron_pointer, learning_rate, error, previous_layer):
-        for weight in previous_layer:
+        for weight in range(len(previous_layer)):
             weights[weight][neuron_pointer] += learning_rate * error * previous_layer[weight]
 
     @staticmethod
