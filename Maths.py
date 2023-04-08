@@ -1,31 +1,34 @@
-import random
 import math
+import random
 
 
+# Necessary math operations for the neural network
 class Maths:
+    # Class variables for Gaussian Number generator
+    GAUSSIAN_MEAN = 0
+    GAUSSIAN_STANDARD_DEVIATION = 0.01
 
+    # Generator of number in Gaussian distribution
     @staticmethod
     def gaussian_number():
-        while True:
-            result = random.gauss(0, 1)
-            if -1 <= result <= 1:
-                return result
+        # Generate randon number in Gaussian distribution with mean and standard deviation (class variables)
+        return random.gauss(Maths.GAUSSIAN_MEAN, Maths.GAUSSIAN_STANDARD_DEVIATION)
 
     @staticmethod
-    def random_weights(rows, cols):
+    def random_weights(rows, columns):
         weights = []
         for row in range(rows):
-            weights_neuron = []
-            for col in range(cols):
-                weights_neuron.append(Maths.gaussian_number() * 0.01)
-            weights.append(weights_neuron)
+            weights_per_neuron = []
+            for column in range(columns):
+                weights_per_neuron.append(Maths.gaussian_number())
+            weights.append(weights_per_neuron)
         return weights
 
     @staticmethod
     def random_biases(number_of_neurons):
         biases = []
         for neuron in range(number_of_neurons):
-            biases.append(Maths.gaussian_number() * 0.01)
+            biases.append(Maths.gaussian_number())
         return biases
 
     # Feedforward algorithm methods
@@ -34,7 +37,7 @@ class Maths:
         weighted_sums = []
         for neuron in range(number_of_neurons):
             summation = 0
-            for number in inputs:
+            for number in range(len(inputs)):
                 summation += inputs[number] * weights[number][neuron]
             weighted_sums.append(summation)
         return weighted_sums
@@ -47,12 +50,16 @@ class Maths:
 
     @staticmethod
     def sigmoid(num):
-        return 1 / (1 + math.exp(- num))
+        return 1 / (1 + math.exp(-num))
+
+    @staticmethod
+    def relu(num):
+        return max(0, num)
 
     @staticmethod
     def activation_function(neurons):
         for neuron in neurons:
-            Maths.sigmoid(neuron)
+            Maths.relu(neuron)
 
     @staticmethod
     def feedforward(inputs, weights, number_of_neurons, biases):
@@ -60,13 +67,3 @@ class Maths:
         Maths.add_biases(weighted_sums, biases)
         Maths.activation_function(weighted_sums)
         return weighted_sums
-
-    # Backpropagation support methods
-    @staticmethod
-    def update_weights(weights, neuron_pointer, learning_rate, error, previous_layer):
-        for weight in range(len(previous_layer)):
-            weights[weight][neuron_pointer] += learning_rate * error * previous_layer[weight]
-
-    @staticmethod
-    def update_biases(biases, neuron_pointer, learning_rate, error):
-        biases[neuron_pointer] += learning_rate * error

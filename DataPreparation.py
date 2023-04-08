@@ -41,8 +41,8 @@ class DataTokenization:
                 tokenized_labels.append(label)
             return tokenized_labels
 
-    @staticmethod
-    def method_token(method):
+
+    def method_token(self, method):
         token = 0
         if 'GET' in method:
             token = 1
@@ -50,38 +50,35 @@ class DataTokenization:
             token = 2
         elif 'PUT' in method:
             token = 3
-        return token
+        return float(token)
 
-    @staticmethod
-    def length(string):
+    def length(self, string):
         length = len(string)
-        return length
+        return float(length)
 
-    @staticmethod
-    def num_upper_cases(string):
+    def num_upper_cases(self, string):
         upper_cases = len(re.findall(r'[A-Z]', string))
-        return upper_cases
+        return float(upper_cases)
 
-    @staticmethod
-    def num_lower_cases(string):
+    def num_lower_cases(self, string):
         lower_cases = len(re.findall(r'[a-z]', string))
-        return lower_cases
+        return float(lower_cases)
 
-    @staticmethod
-    def num_numbers(string):
+
+    def num_numbers(self, string):
         numbers = len(re.findall(r'[0-9]', string))
-        return numbers
+        return float(numbers)
 
-    @staticmethod
-    def num_special_chars(full_length, uppers, lowers, numbers):
+
+    def num_special_chars(self, full_length, uppers, lowers, numbers):
         special_chars = full_length - (uppers + lowers + numbers)
-        return special_chars
+        return float(special_chars)
 
-    @staticmethod
-    def label(string):
+
+    def label(self, string):
         label = 2
         if string == 'normal':
-            label = 0
+            label = 0.0
         elif string == 'anomalous':
-            label = 1
+            label = 1.0
         return label
