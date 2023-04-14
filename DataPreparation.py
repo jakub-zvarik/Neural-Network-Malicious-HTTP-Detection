@@ -1,5 +1,6 @@
 import csv
 import re
+import numpy as np
 
 
 class DataTokenization:
@@ -29,17 +30,18 @@ class DataTokenization:
                 new_array.append(self.num_special_chars(new_array[6], new_array[7], new_array[8], new_array[9]))
                 # Append to the resulting array
                 tokenized_data.append(new_array)
-
-            return tokenized_data
+            # Return as Numpy array
+            return np.array(tokenized_data)
 
     def tokenize_labels(self):
         tokenized_labels = []
         with open(self.data, 'r') as datafile:
             reader = csv.reader(datafile)
             for row in reader:
-                label = self.label(row[3])
+                label = [self.label(row[3])]
                 tokenized_labels.append(label)
-            return tokenized_labels
+            # Return as Numpy array
+            return np.array(tokenized_labels)
 
 
     def method_token(self, method):
@@ -64,16 +66,13 @@ class DataTokenization:
         lower_cases = len(re.findall(r'[a-z]', string))
         return float(lower_cases)
 
-
     def num_numbers(self, string):
         numbers = len(re.findall(r'[0-9]', string))
         return float(numbers)
 
-
     def num_special_chars(self, full_length, uppers, lowers, numbers):
         special_chars = full_length - (uppers + lowers + numbers)
         return float(special_chars)
-
 
     def label(self, string):
         label = 2
