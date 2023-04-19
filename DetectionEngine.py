@@ -3,15 +3,15 @@ import numpy as np
 
 
 # Detection engine for the proposed Web Application Firewall
-# Feedforward Neural Network (FNN) with 2 hidden layers
+# Feedforward Neural Network with 2 hidden layers
 # Weights and biases are initialised with Gaussian numbers (mean 0, standard deviation 1)
-# FNN is using ReLU as activation function
-# Adam optimiser used for backpropagation
-# Training is conducted using 'mini-batch' method for better performance
+# Neural Network is using ReLU as activation function
+# Adam optimiser used for backpropagation with adaptive learning rate
+# Training is conducted using 'mini-batch' gradient for better performance
 class DetectionEngine:
 
     # Constructor
-    def __init__(self, input_nodes, hidden1_neurons, hidden2_neurons, output_neurons, learning_rate):
+    def __init__(self, hidden1_neurons, hidden2_neurons, learning_rate, output_neurons=1, input_nodes=11):
         # General
         self.learning_rate = learning_rate
         # Initialise the weights with Gaussian numbers (mean of 0, standard deviation of 1)
@@ -33,7 +33,6 @@ class DetectionEngine:
         self.ctrl_exp_decay_rate2 = 0.999
         self.avoid_div_by_0 = 1e-8
         self.adam_iteration = 0
-        self.batch_size = 0
         # Initialise arrays to keep track of first (m) and second (v) moments of gradient descent
         # Weights gradient moments
         self.m_weights_h1, self.v_weights_h1 = np.zeros_like(self.weights_h1), np.zeros_like(self.weights_h1)
@@ -59,51 +58,66 @@ class DetectionEngine:
         return self.feed_hidden2_output
 
     # Backpropagation starting at the output layer
+    # Calculation of the error made
+    # Gradient of the error for weights
+    # Gradient of the error for biases
     def backpropagation_output(self, outputs, batch_targets):
-        gradient_output = outputs - batch_targets
-        gradient_weights_out = np.dot(self.activated_hidden2.T, gradient_output) / self.batch_size
-        gradient_biases_out = np.sum(gradient_output) / self.batch_size
-        return gradient_output, gradient_weights_out, gradient_biases_out
+        # Errors
+        errors = outputs - batch_targets
+        # Gradient - weights
+        gradient_weights = np.dot(self.activated_hidden2.T, errors)
+        # Gradient - biases
+        gradient_biases = np.sum(errors)
+        return errors, gradient_weights, gradient_biases
 
-    # Backpropagation starting at hidden layer (applicable on both)
-    def backpropagation_hidden_layers(self, prev_gradient, weights, activated, activated_previous):
-        gradient_h2 = np.dot(prev_gradient, weights.T) * Maths.relu_derivative(activated)
-        gradient_weights_h2 = np.dot(activated_previous.T, gradient_h2) / self.batch_size
-        gradient_biases_h2 = np.sum(gradient_h2) / self.batch_size
-        return gradient_h2, gradient_weights_h2, gradient_biases_h2
+    # Backpropagation - hidden layers (applicable on both)
+    # Calculation of the error in the hidden layer
+    # Gradient of the error for weights
+    # Gradient of the error for biases
+    def backpropagation_hidden_layers(self, prev_error, weights, output_second, output_first):
+        # Errors
+        errors = np.dot(prev_error, weights.T) * Maths.relu_derivative(output_second)
+        # Gradient - weights
+        gradient_weights = np.dot(output_first.T, errors)
+        # Gradient - biases
+        gradient_biases = np.sum(errors)
+        return errors, gradient_weights, gradient_biases
 
+    # Adam (Adaptive Moment Estimation) optimiser
+    # Adapt learning rate for more effective learning
     def adam_optimiser_updater(self, parameters, gradients, m_gradients, v_gradients):
+        # Perform operation on all arrays
         for index in range(len(parameters)):
             # Update biased first and second moment estimates
             m_gradients[index] = self.ctrl_exp_decay_rate1 * m_gradients[index] + (1 - self.ctrl_exp_decay_rate1) * \
                                  gradients[index]
             v_gradients[index] = self.ctrl_exp_decay_rate2 * v_gradients[index] + (1 - self.ctrl_exp_decay_rate2) * (
                     gradients[index] ** 2)
-            # Compute bias-corrected first and second moment estimates
-            m_hat = m_gradients[index] / (1 - self.ctrl_exp_decay_rate1 ** self.adam_iteration)
-            v_hat = v_gradients[index] / (1 - self.ctrl_exp_decay_rate2 ** self.adam_iteration)
-            # Update parameter
-            parameters[index] -= self.learning_rate * m_hat / (np.sqrt(v_hat) + self.avoid_div_by_0)
+            # Calculation of the bias-corrected moment estimates
+            m_bias_corrected = m_gradients[index] / (1 - self.ctrl_exp_decay_rate1 ** self.adam_iteration)
+            v_bias_corrected = v_gradients[index] / (1 - self.ctrl_exp_decay_rate2 ** self.adam_iteration)
+            # Update parameters with adapted learning rate
+            parameters[index] -= self.learning_rate * m_bias_corrected / (np.sqrt(v_bias_corrected) + self.avoid_div_by_0)
         # Update Adam optimiser parameters
         self.m_weights_h1, self.m_biases_h1, self.m_weights_h2, self.m_biases_h2, self.m_weights_out, self.m_biases_out = m_gradients
         self.v_weights_h1, self.v_biases_h1, self.v_weights_h2, self.v_biases_h2, self.v_weights_out, self.v_biases_out = v_gradients
 
+    # Complete backpropagation process
+    # Calculate errors and gradients in all layers
+    # Use Adam optimiser to update all weights and biases, using information from gradient to adapt learning rate
     def backpropagation(self, batch, batch_targets, output):
-        self.batch_size = batch.shape[0]
-        # Compute gradient for the output layer and for the weights and biases connected to the output layer
-        gradient_out, gradient_weights_out, gradient_biases_out = self.backpropagation_output(output, batch_targets)
-        # Compute gradient for the second hidden layer and for the weights and biases connected to the second hidden layer
-        gradient_h2, gradient_weights_h2, gradient_biases_h2 = self.backpropagation_hidden_layers(gradient_out,
+        # Calculate errors and gradients for weights and biases in the output layer
+        error, gradient_weights_out, gradient_biases_out = self.backpropagation_output(output, batch_targets)
+        # Calculate errors and gradients for weights and biases in the second hidden layer
+        gradient_h2, gradient_weights_h2, gradient_biases_h2 = self.backpropagation_hidden_layers(error,
                                                                                                   self.weights_out,
                                                                                                   self.activated_hidden2,
                                                                                                   self.activated_hidden1)
-
-        # Compute gradient for the first hidden layer and for the weights and biases connected to the first hidden layer
+        # Calculate errors and gradients for weights and biases in the first hidden layer
         gradient_h1, gradient_weights_h1, gradient_biases_h1 = self.backpropagation_hidden_layers(gradient_h2,
                                                                                                   self.weights_h2,
                                                                                                   self.activated_hidden1,
                                                                                                   batch)
-
         # Create lists of parameters, gradients, first moments (m) and second moments (v) of gradient descent
         parameters = [self.weights_h1, self.biases_h1, self.weights_h2, self.biases_h2, self.weights_out,
                       self.biases_out]
@@ -113,13 +127,18 @@ class DetectionEngine:
                        self.m_biases_out]
         v_gradients = [self.v_weights_h1, self.v_biases_h1, self.v_weights_h2, self.v_biases_h2, self.v_weights_out,
                        self.v_biases_out]
-
         # Update weights and biases with Adam optimiser
         self.adam_optimiser_updater(parameters, gradients, m_gradients, v_gradients)
 
+    # Training
+    # Mini-Batch method
+    # Random permutations to shuffle datasets to improve learning
     def train(self, dataset, targets, epochs, batch_size):
+        # Rows
         number_of_rows = dataset.shape[0]
+        # Rounded number of batches
         number_of_batches = number_of_rows // batch_size
+        # Training
         for epoch in range(1, epochs + 1):
             # Random permutation of the dataset and targets to shuffle them
             permutation = np.random.permutation(number_of_rows)
@@ -127,6 +146,7 @@ class DetectionEngine:
             targets_shuffled = targets[permutation]
             # Perform mini-batch training
             for batch in range(number_of_batches):
+                # Calculate starting and ending point of each batch
                 start = batch * batch_size
                 end = min(start + batch_size, number_of_rows)
                 data_batch = dataset_shuffled[start:end]
@@ -139,7 +159,7 @@ class DetectionEngine:
             # Calculate and print error every 10 epochs
             if epoch % 10 == 0:
                 # Calculate average error (squared mean of targets - outputs)
-                error = np.mean((targets - self.feedforward(dataset)))
+                error = np.mean((targets - self.feedforward(dataset)) ** 2)
                 print(f'Epoch {epoch} | Error: {error:.4f}')
 
     # Prediction is used to validate neural network's training

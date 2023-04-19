@@ -73,4 +73,4 @@ class Maths:
         false_n = false_negative / len(predictions) * 100
         false_p = false_positive / len(predictions) * 100
         # Print the information
-        print(f"\nAccuracy: {accuracy:.2f}% | False negatives: {false_n:.2f}% | False positives: {false_p:.2f}%")
+        print(f"\nAccuracy: {accuracy:.2f}% | False negatives: {false_n:.2f}% | False positives: {false_p:.2f}%\n")
