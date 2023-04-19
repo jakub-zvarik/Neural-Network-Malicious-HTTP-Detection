@@ -1,4 +1,4 @@
-<h3>Neural Network for Malicious HTTP Request Detection</h3>
+<h3>Neural Network for Malicious HTTP Requests Detection</h3>
 
 <hr>
 
