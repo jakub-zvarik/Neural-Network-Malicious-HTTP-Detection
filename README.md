@@ -1,7 +1,6 @@
 <h3>Neural Network for Malicious HTTP Requests Detection</h3>
 
 <hr>
-
 <h4>Approach</h4><br>
 Feedforward Neural Network<br>
 Supervised learning<br>
@@ -13,7 +12,6 @@ Adam optimiser<br>
 
 <h4>Results</h4>
 Trained and tested on CSIC 2010<br>
-
 <b>AVERAGE RESULTS</b> 
 (calculated on 2-fold test, 10x retrained on both halves)<br>
 <br>
