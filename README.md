@@ -13,7 +13,7 @@ Adam optimiser<br>
 <h4>Results</h4>
 Trained and tested on CSIC 2010<br>
 <b>AVERAGE RESULTS</b> 
-(calculated on 2-fold test, 10x retrained on both halves)<br>
+(calculated on 2-fold test, 10x retrained on both folds)<br>
 <br>
 Overall accuracy	92.165 % <br>
 False negatives	3.350 % <br>
