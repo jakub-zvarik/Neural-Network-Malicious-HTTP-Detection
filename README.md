@@ -21,8 +21,8 @@ False positives	4.485 % <br>
 
 <h4>How to run</h4>
 Program is ready to run. It will conduct training and test on both folds 1 time and show accuracy. During the training, you will be able to see calculated error every 10 epochs. <br>
-To change parameters of the neural network, navigate to the main class, all parameters can be found there, in the main method. <br>
-You need NumPy installed.<br>
+To change parameters of the neural network, navigate to the main class, all parameters can be found there in the main method. <br>
+You need to have NumPy installed to run the program.<br>
 Run command "python3 main.py" from the project directory <br>
 <br>
 Please remember, the accuracy will be slightly different from the accuracy shown above, since the accuracy above is average calculated on multiple iterations. <br>
